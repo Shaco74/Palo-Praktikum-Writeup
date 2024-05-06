@@ -1,0 +1,108 @@
+\documentclass{article}
+
+\author{Kacper Cömlek}
+\title{Palo Praktikum 2 - Writeup}
+\date{06.05.2024}
+
+\usepackage{multirow}
+
+\newcommand{\Aufgabe}[2]{\PSN{Aufgabe}{#1}{#2}}
+
+\begin{document}
+
+\maketitle
+\tableofcontents 
+
+
+\section{Aufgabenstellung}
+
+  \subsection{Aufgabe 1}
+  
+  \begin{itemize}
+  
+  \item Beispielprogramm: 020\_06\_CompilerExercise
+  
+  \begin{itemize}
+  \item In den Home Ordner kopieren
+  \item Programm mit verschiedenen Compileroptionen aufrufen und \\Laufzeit notieren
+  \end{itemize}
+
+  \item Das Programm hat mehrere Durchläufe, berechne die mittlere gerundete Laufzeit
+  
+  \begin{itemize}
+  \item Außreißer wie z.B. der erste Durchlauf werden ignoriert
+  \end{itemize}
+
+  \item Die Ergebnisse haben eine Checksum und Total, die überprüft werden müssen. 
+    Wenn die Optimierung die Checksum verändert, ist das Ergebnis falsch. 
+    In der Tabelle kann dann \emph{n.a. (nicht anwendbar)} eingetragen werden.
+
+  \item Sofern nicht anders angegben verwenden wir Floating-Point Modell precise. 
+    Ggf. explizit einstellen. 
+  
+  \item In den Einzelnen Schritten Report Dateien anlegen und versuchen anhand 
+    dessen die Beobachtungen zu erklären. 
+  \end{itemize}
+
+  \subsection{Aufgabe 2}
+
+
+\section{Aufgabenlösung}
+
+\subsection{Aufgabe 1 Lösung} 
+Meine Lösung für Aufgabe 1 ist in Tabelle \ref{tab:aufgabe1} dargestellt\dots
+
+\subsubsection{Aufgabe 1 - Compileroptionen}
+Meine Compileroptionen \& Checksum
+\begin{verbatim}
+#ICC Compilation
+CXX_ICC = icpc
+CXXFLAGS_ICC = -fopenmp -fp-model=precise -O0
+OPTFLAGS_ICC = -qopt-report=5 -qopt-report-file=$@.optrpt
+LDFLAGS_ICC =  -qopenmp -qopt-report-file=ipo_test.optrpt 
+               -qopt-report=5
+
+Total = 19590.488262 Check Sum = 5001000000
+
+#ICC Compilation für ipo
+CXX_ICC = icpc
+CXXFLAGS_ICC = -fopenmp -fp-model=precise -O3 -ipo
+OPTFLAGS_ICC = -qopt-report=5
+LDFLAGS_ICC = -qopenmp -qopt-report-file=ipo_test.optrpt 
+              -qopt-report=5
+\end{verbatim}
+
+\subsubsection{Aufgabe 1 - Laufzeiten}
+
+\begin{table}[h]
+\centering
+\caption{Optimization Options}
+\label{tab:aufgabe1}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Optionen} & \textbf{Mittlere Laufzeit} \\
+\hline
+/00 (keine Optimierung) & 4,1786s \\ 
+\hline
+/02 (default Optimierung) & 4,1032s \\
+\hline
+/03 (aggressive Optimierung) & 4,1929s \\
+\hline
+% multicol
+\multicolumn{2}{|c|}{\textbf{Wählen Sie für die folgenden Schritte das Setting /03}} \\
+\hline
+Prozessorspezifische Optimierung -xHost & 4,0935s \\
+\hline
+Interprozeduale Optimierung (multi-File) -ipo & 3,5788s \\
+\hline
+Interprozeduale + Prozessorspezifische Optimierung & 3,5753s \\
+\hline
+%multirow
+\multirow{3}{*}{Prozessorspezifische Optimierung + } &  \\
+& \\  Interprozeduale Optimierung (multi-File) & 2,4554s \\
+& \\  + Floating Point Model /fast & \\
+\hline
+\end{tabular}
+\end{table}
+
+\end{document}
