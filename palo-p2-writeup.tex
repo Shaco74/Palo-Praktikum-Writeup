@@ -16,35 +16,35 @@
 
 \section{Aufgabenstellung}
 
-  \subsection{Aufgabe 1}
+\subsection{Aufgabe 1}
   
-  \begin{itemize}
-  
-  \item Beispielprogramm: 020\_06\_CompilerExercise
-  
-  \begin{itemize}
-  \item In den Home Ordner kopieren
-  \item Programm mit verschiedenen Compileroptionen aufrufen und \\Laufzeit notieren
-  \end{itemize}
+\begin{itemize}
+	  
+	\item Beispielprogramm: 020\_06\_CompilerExercise
+	        
+	      \begin{itemize}
+	      	\item In den Home Ordner kopieren
+	      	\item Programm mit verschiedenen Compileroptionen aufrufen und \\Laufzeit notieren
+	      \end{itemize}
+	      
+	\item Das Programm hat mehrere Durchläufe, berechne die mittlere gerundete Laufzeit
+	        
+	      \begin{itemize}
+	      	\item Außreißer wie z.B. der erste Durchlauf werden ignoriert
+	      \end{itemize}
+	      
+	\item Die Ergebnisse haben eine Checksum und Total, die überprüft werden müssen. 
+	      Wenn die Optimierung die Checksum verändert, ist das Ergebnis falsch. 
+	      In der Tabelle kann dann \emph{n.a. (nicht anwendbar)} eingetragen werden.
+	      
+	\item Sofern nicht anders angegben verwenden wir Floating-Point Modell precise. 
+	      Ggf. explizit einstellen. 
+	        
+	\item In den Einzelnen Schritten Report Dateien anlegen und versuchen anhand 
+	      dessen die Beobachtungen zu erklären. 
+\end{itemize}
 
-  \item Das Programm hat mehrere Durchläufe, berechne die mittlere gerundete Laufzeit
-  
-  \begin{itemize}
-  \item Außreißer wie z.B. der erste Durchlauf werden ignoriert
-  \end{itemize}
-
-  \item Die Ergebnisse haben eine Checksum und Total, die überprüft werden müssen. 
-    Wenn die Optimierung die Checksum verändert, ist das Ergebnis falsch. 
-    In der Tabelle kann dann \emph{n.a. (nicht anwendbar)} eingetragen werden.
-
-  \item Sofern nicht anders angegben verwenden wir Floating-Point Modell precise. 
-    Ggf. explizit einstellen. 
-  
-  \item In den Einzelnen Schritten Report Dateien anlegen und versuchen anhand 
-    dessen die Beobachtungen zu erklären. 
-  \end{itemize}
-
-  \subsection{Aufgabe 2}
+\subsection{Aufgabe 2}
 
 
 \section{Aufgabenlösung}
@@ -75,34 +75,34 @@ LDFLAGS_ICC = -qopenmp -qopt-report-file=ipo_test.optrpt
 \subsubsection{Aufgabe 1 - Laufzeiten}
 
 \begin{table}[h]
-\centering
-\caption{Optimization Options}
-\label{tab:aufgabe1}
-\begin{tabular}{|c|c|}
-\hline
-\textbf{Optionen} & \textbf{Mittlere Laufzeit} \\
-\hline
-/00 (keine Optimierung) & 4,1786s \\ 
-\hline
-/02 (default Optimierung) & 4,1032s \\
-\hline
-/03 (aggressive Optimierung) & 4,1929s \\
-\hline
-% multicol
-\multicolumn{2}{|c|}{\textbf{Wählen Sie für die folgenden Schritte das Setting /03}} \\
-\hline
-Prozessorspezifische Optimierung -xHost & 4,0935s \\
-\hline
-Interprozeduale Optimierung (multi-File) -ipo & 3,5788s \\
-\hline
-Interprozeduale + Prozessorspezifische Optimierung & 3,5753s \\
-\hline
-%multirow
-\multirow{3}{*}{Prozessorspezifische Optimierung + } &  \\
-& \\  Interprozeduale Optimierung (multi-File) & 2,4554s \\
-& \\  + Floating Point Model /fast & \\
-\hline
-\end{tabular}
+	\centering
+	\caption{Optimization Options}
+	\label{tab:aufgabe1}
+	\begin{tabular}{|c|c|}
+		\hline
+		\textbf{Optionen} & \textbf{Mittlere Laufzeit} \\
+		\hline
+		/00 (keine Optimierung) & 4,1786s \\ 
+		\hline
+		/02 (default Optimierung) & 4,1032s \\
+		\hline
+		/03 (aggressive Optimierung) & 4,1929s \\
+		\hline
+		% multicol
+		\multicolumn{2}{|c|}{\textbf{Wählen Sie für die folgenden Schritte das Setting /03}} \\
+		\hline
+		Prozessorspezifische Optimierung -xHost & 4,0935s \\
+		\hline
+		Interprozeduale Optimierung (multi-File) -ipo & 3,5788s \\
+		\hline
+		Interprozeduale + Prozessorspezifische Optimierung & 3,5753s \\
+		\hline
+		%multirow
+		\multirow{3}{*}{Prozessorspezifische Optimierung + } &  \\
+		  &   \\  Interprozeduale Optimierung (multi-File) & 2,4554s \\
+		  &   \\  + Floating Point Model /fast & \\
+		\hline
+	\end{tabular}
 \end{table}
 
-\end{document}
+\end{document} 
