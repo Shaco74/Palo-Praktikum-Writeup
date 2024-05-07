@@ -195,4 +195,108 @@ Da es in der Algebra sehr viele Regeln für die Umformung und Vereinfachung gibt
 Außerdem sind die Compiler besser da drin Integer zu vereinfachen auch wenn für Floats die selben Algebra-Regeln gelten. Das hat den Hintergrund dass bei Floats leicher ungewollte Nebeneffekte auftreten können. Speziell der Verlust der Präzision ist ein Risiko.
 Grundsätzlich ist es am sichersten algebraische Optimierungen händisch / manuel auszuführen.
 
+\subsection{Aufgabe 3 Lösung}
+Erster Durchlauf ohne Veränderungen:
+
+\begin{verbatim}
+CXXFLAGS_ICC = -qopenmp -fp-model=precise
+kc2170s@fb05s-es-cont01:~/dev/Vorlage$ make run-icc
+./01_Original_icc
+#### Runtime Measurements Particle Simulation  ###
+Run 0: Runtime: 10.54146103, GLOPS/s: 0.50926401, Not in Average
+Run 1: Runtime: 10.54218103, GLOPS/s: 0.50922901, Not in Average
+Run 2: Runtime: 10.54181003, GLOPS/s: 0.50924701, Not in Average
+Run 3: Runtime: 10.54113603, GLOPS/s: 0.50927901,    
+Run 4: Runtime: 10.54284603, GLOPS/s: 0.50919701,    
+Run 5: Runtime: 10.54302903, GLOPS/s: 0.50918801,    
+Run 6: Runtime: 10.54333003, GLOPS/s: 0.50917301,    
+Run 7: Runtime: 10.54104103, GLOPS/s: 0.50928401,    
+Run 8: Runtime: 10.54194603, GLOPS/s: 0.50924001,    
+Run 9: Runtime: 10.54319703, GLOPS/s: 0.50918001,    
+
+####### Average Performance #########
+Average Runtime: 10.54236103 +- 0.000370 Seconds 
+Average Performance: 0.50922003 +- 0.00001803 GFLOPS/s 
+#####################################
+
+
+## Ohne Flags
+CXXFLAGS_ICC =
+#### Runtime Measurements Particle Simulation  ###
+Run 0: Runtime: 0.75828603, GLOPS/s: 7.07962601, Not in Average
+Run 1: Runtime: 0.75850603, GLOPS/s: 7.07757201, Not in Average
+Run 2: Runtime: 0.75819003, GLOPS/s: 7.08052301, Not in Average
+Run 3: Runtime: 0.75825103, GLOPS/s: 7.07995101,    
+Run 4: Runtime: 0.75822003, GLOPS/s: 7.08024101,    
+Run 5: Runtime: 0.75836703, GLOPS/s: 7.07887001,    
+Run 6: Runtime: 0.75840703, GLOPS/s: 7.07849601,    
+Run 7: Runtime: 0.75811503, GLOPS/s: 7.08122501,    
+Run 8: Runtime: 0.75824703, GLOPS/s: 7.07999101,    
+Run 9: Runtime: 0.75814103, GLOPS/s: 7.08098001,    
+
+####### Average Performance #########
+Average Runtime: 0.75825003 +- 0.000041 Seconds 
+Average Performance: 7.07996503 +- 0.00038003 GFLOPS/s 
+#####################################
+\end{verbatim}
+
+\subsubsection{a) Erstellen der Baseline}
+Die Baseline wurde ohne Optimierungen erstellt, um die Performance vergleichbar zu messen.
+
+\begin{verbatim}
+CXXFLAGS_ICC = -O0
+#### Runtime Measurements Particle Simulation  ###
+Run 0: Runtime: 13.49689803, GLOPS/s: 0.39774901, Not in Average
+Run 1: Runtime: 13.48814203, GLOPS/s: 0.39800701, Not in Average
+Run 2: Runtime: 13.49010003, GLOPS/s: 0.39795001, Not in Average
+Run 3: Runtime: 13.49346803, GLOPS/s: 0.39785001,    
+Run 4: Runtime: 13.47982303, GLOPS/s: 0.39825301,    
+Run 5: Runtime: 13.49495703, GLOPS/s: 0.39780601,    
+Run 6: Runtime: 13.49897003, GLOPS/s: 0.39768801,    
+Run 7: Runtime: 13.49980603, GLOPS/s: 0.39766401,    
+Run 8: Runtime: 13.49966103, GLOPS/s: 0.39766801,    
+Run 9: Runtime: 13.49636003, GLOPS/s: 0.39776501,    
+
+####### Average Performance #########
+Average Runtime: 13.49472103 +- 0.002648 Seconds 
+Average Performance: 0.39781403 +- 0.00007803 GFLOPS/s 
+#####################################
+\end{verbatim}
+
+Um die Performance zu Micro-Benchmarken werden folgende Flaggen verwendet:
+\begin{verbatim}
+LDFLAGS_ICC = -qopenmp -lbenchmark -lpfm
+\end{verbatim}
+
+\begin{verbatim}
+Particle partikelI = partikel[i];
+Run 4: Runtime: 12.93897903,     GLOPS/s: 0.41490001,    
+Run 5: Runtime: 12.93852903,     GLOPS/s: 0.41491401, 
+
+softening außerhalb der Schleifen
+Run 4: Runtime: 12.88132003,     GLOPS/s: 0.41675701,    
+Run 5: Runtime: 12.88253703,     GLOPS/s: 0.41671801,
+
+Final: 
+kc2170s@fb05s-es-cont01:~/dev/Vorlage$ make run-icc
+./01_Original_icc
+#### Runtime Measurements Particle Simulation  ###
+Run 0: Runtime: 5.35824803, GLOPS/s: 1.00189101, Not in Average
+Run 1: Runtime: 5.35637103, GLOPS/s: 1.00224201, Not in Average
+Run 2: Runtime: 5.35758803, GLOPS/s: 1.00201501, Not in Average
+Run 3: Runtime: 5.35826003, GLOPS/s: 1.00188901,    
+Run 4: Runtime: 5.35855003, GLOPS/s: 1.00183501,    
+Run 5: Runtime: 5.35833003, GLOPS/s: 1.00187601,    
+Run 6: Runtime: 5.35620103, GLOPS/s: 1.00227401,    
+Run 7: Runtime: 5.81265103, GLOPS/s: 0.92356801,    
+Run 8: Runtime: 5.35562303, GLOPS/s: 1.00238201,    
+Run 9: Runtime: 5.36150303, GLOPS/s: 1.00128301,    
+
+####### Average Performance #########
+Average Runtime: 5.42301703 +- 0.064943 Seconds 
+Average Performance: 0.99073003 +- 0.01119403 GFLOPS/s 
+#####################################
+\end{verbatim}
+
+
 \end{document}
