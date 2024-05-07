@@ -1,0 +1,12 @@
+
+*.gz
+
+palo-p2-writeup.aux
+
+palo-p2-writeup.fdb_latexmk
+
+palo-p2-writeup.fls
+
+palo-p2-writeup.log
+
+palo-p2-writeup.toc

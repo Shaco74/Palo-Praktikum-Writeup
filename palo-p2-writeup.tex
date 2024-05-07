@@ -117,17 +117,82 @@ Interprozeduale + Prozessorspezifische Optimierung & 3,5753s \\
 \end{table}
 
 \subsection{Aufgabe 2 Lösung}
+Moderne Compiler führen viele Veränderungen auf dem Code Durch, \\
+um die Laufzeit zu verbessern. Für den Entwickler ist es äußerst nützlich \\
+zu wissen, was der Compiler kann und was er nicht kann.
 \subsubsection{Material}
 \begin{itemize}
   \item optimizing\_cpp.pdf Kapitel 8.1
 \end{itemize} 
 
 \subsubsection{Constant Folding und Constant Propagation}
+In diesem Optimierungsverfahren werden mathematische Ausdrücke in Konstanten umgewandelt. So muss das Programm nicht in jedem Durchlauf die Berechnung erneut durchführen. Sondern der Compiler macht die berechnung einmal vorher und speichert das Ergebnis. \\
+\textbf{Beispiel:}
+
+\begin{math}
+int\ a = 5 * 2;
+\end{math}
+
+\begin{math}
+int\ b = 2+3;
+\end{math}
+
+\begin{math}
+int\ c = b / a;
+\end{math}
+
+\textbf{wird zu} 
+
+\begin{math}
+int\ a = 10;
+\end{math}
+
+\begin{math}
+int\ b = 5;
+\end{math}
+
+\begin{math}
+int\ c = 0.5;
+\end{math}
+
+Genau so würde auch eine Funktion ggf. in eine inline Konstante umgewandelt werden. Desweiteren wird empfohlen die Ausdrücke mit Klammern zu umschließen, um die Reihenfolge der Berechnung zu garantieren und somit die Konstantenbildung zu ermöglichen. \\
+Eine Limitierung stellen jedoch komplexere Funktionen dar wie zum Beispiel die Sinusfunktion. Diese kann in der Regel nicht in eine Konstante umgewandelt werden. Manche Compiler schaffen \emph{sqrt} oder \emph{pow} Funktionen zu optimieren, jedoch ist dies nicht immer der Fall. 
 
 \subsubsection{Loop Unrolling}
+In dieser Optimierungsmethode werden Schleifen durch Inline-Code ersetzt. Dies wird insbesonders bei kleinen Schleifen durchgeführt. 
+\textbf{Beispiel:}
+\begin{verbatim}
+for (int i = 0; i < 4; i++) {
+  a[i] = b[i] + c[i];
+}
+\end{verbatim}
+\textbf{wird zu}
+\begin{verbatim}
+a[0] = b[0] + c[0];
+a[1] = b[1] + c[1];
+a[2] = b[2] + c[2];
+\end{verbatim}
+
+Leider "unrollen" manche Compiler zu viel, dies führt dazu dass der code cache, micro-op cache und der loop buffer überlastet wird. Dies führt zu einer schlechteren Performance. Bei aggressiveren Optimierung wird eher unrolled, man muss also aufpassen ob wirklich eine Verbesserung stattfindet.
 
 \subsubsection{Scheduling}
+Der Compiler versucht die Reihenfolge der Befehle zu optimieren. Dies wird insbesonders bei Pipelining und Superskalarprozessoren wichtig. Der Compiler versucht die Befehle so anzuordnen, dass die Pipelines nicht unterbrochen werden. \\
+Moderne CPUs können auch ohne die Hilfe des Compilers die Befehle umordnen, jedoch ist es für den CPU leichter, wenn der Compiler dort mithilft.
 
 \subsubsection{Algebraic Reduction}
+Die meisten Compiler können einfache mathematische Ausdrücke verinfachen wie etwa: \[
+  -(-a) = a
+\] 
+
+Entwickler würden eher unwahrscheinlich solch einen Ausdruck schreiben, jedoch kann es sein dass solch ein Ausdruck infolge anderer Optimierungen entsteht wie durch zum Beispiel Inlining.
+
+Entwickler schreiben dennoch Ausdrücke welche verinfacht werden können. Das kann aufgrund der Lesbarkeit beispielsweise passieren. Beispiel: \begin{verbatim}
+if(!a && !b) => if(!(a || b)) 
+\end{verbatim} 
+Der Linke Ausdruck ist leichter zu lesen auch wenn er eine extra Operation braucht. 
+Der Compiler optimiert das nach rechts. \\
+Da es in der Algebra sehr viele Regeln für die Umformung und Vereinfachung gibt, gibt es keinen Compiler welcher alle Regeln umsetzen kann. In der Regel implementieren die Compiler unterschiedliche Regeln und sind verschieden gut im verinfachen von leichteren oder komplexeren Ausdrücken. \\
+Außerdem sind die Compiler besser da drin Integer zu vereinfachen auch wenn für Floats die selben Algebra-Regeln gelten. Das hat den Hintergrund dass bei Floats leicher ungewollte Nebeneffekte auftreten können. Speziell der Verlust der Präzision ist ein Risiko.
+Grundsätzlich ist es am sichersten algebraische Optimierungen händisch / manuel auszuführen.
 
 \end{document}
